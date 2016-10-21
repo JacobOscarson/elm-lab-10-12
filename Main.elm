@@ -3,7 +3,8 @@ module Main exposing (main)
 import Uuid
 import Random.Pcg exposing (Seed, initialSeed, step)
 import Html.App exposing (programWithFlags)
-import Html exposing (Html, div, button, text)
+import Html exposing (Html, div, button, span, text)
+import Html.Attributes exposing (id)
 import Html.Events exposing (onClick)
 
 
@@ -43,14 +44,14 @@ view model =
         uuidText =
             case model.currentUuid of
                 Nothing ->
-                    "No Uuid was created so far"
+                    "Waiting for first UUID..."
 
                 Just uuid ->
-                    "Current Uuid: " ++ Uuid.toString uuid
+                    Uuid.toString uuid
     in
         div []
-            [ button [ onClick NewUuid ] [ text "Create a new Uuid!" ]
-            , text uuidText
+            [ span [ id "uuid" ] [ text uuidText ]
+            , button [ onClick NewUuid ] [ text "Create another" ]
             ]
 
 
