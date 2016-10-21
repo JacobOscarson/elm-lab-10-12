@@ -4,7 +4,7 @@ import Uuid
 import Random.Pcg exposing (Seed, initialSeed, step)
 import Html.App exposing (programWithFlags)
 import Html exposing (Html, div, button, span, text)
-import Html.Attributes exposing (id)
+import Html.Attributes exposing (id, attribute)
 import Html.Events exposing (onClick)
 
 
@@ -52,6 +52,14 @@ view model =
         div []
             [ span [ id "uuid" ] [ text uuidText ]
             , button [ onClick NewUuid ] [ text "Create another" ]
+            , button
+                [ (attribute
+                    "data-clipboard-target"
+                    "#uuid"
+                  )
+                , id "copy"
+                ]
+                [ text "Copy" ]
             ]
 
 
