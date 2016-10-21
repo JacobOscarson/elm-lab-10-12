@@ -17,13 +17,17 @@ type Msg
     = NewUuid
 
 
+regen curSeed =
+    step Uuid.uuidGenerator curSeed
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         NewUuid ->
             let
                 ( newUuid, newSeed ) =
-                    step Uuid.uuidGenerator model.currentSeed
+                    regen model.currentSeed
             in
                 ( { model
                     | currentUuid = Just newUuid
@@ -59,11 +63,19 @@ view model =
 
 init : Int -> ( Model, Cmd Msg )
 init seed =
-    ( { currentSeed = initialSeed seed
-      , currentUuid = Nothing
-      }
-    , Cmd.none
-    )
+    let
+        firstSeed =
+            initialSeed seed
+
+        ( firstUuid, secondSeed ) =
+            regen firstSeed
+
+        initialModel =
+            { currentSeed = secondSeed
+            , currentUuid = Just firstUuid
+            }
+    in
+        ( initialModel, Cmd.none )
 
 
 main =
